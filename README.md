@@ -1,3 +1,5 @@
+<img width="871" height="741" alt="Captura de tela 2026-10-14 232327" src="https://github.com/user-attachments/assets/18431fe9-b57f-4470-9c70-e87ac13874e5" />
+<img width="706" height="560" alt="Captura de tela 2026-10-14 232351" src="https://github.com/user-attachments/assets/ed1a5fc7-158b-46e0-a4fd-45af6f766d47" />
 # 🛠️ Ferramentas Digitais - Painel de Manutenção Windows
 
 Painel de manutenção para Windows, desenvolvido em PowerShell e Batch, organizado em menus interativos. O projeto reúne verificações de sistema, limpeza, reparo, rede, backup, impressoras e diagnósticos de hardware em uma única interface de terminal.
