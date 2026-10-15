@@ -2,7 +2,7 @@
 
 Painel de manutenção para Windows, desenvolvido em PowerShell e Batch, organizado em menus interativos. O projeto reúne verificações de sistema, limpeza, reparo, rede, backup, impressoras e diagnósticos de hardware em uma única interface de terminal.
 
-> ⚠️ **Atenção:** Algumas funções alteram o sistema, a rede ou os arquivos do computador. Leia as confirmações exibidas pelo programa e salve seu trabalho antes de usar as funções de energia, reparo ou formatação.
+> ⚠️ **Atenção:** Algumas funções alteram o sistema, a rede ou os arquivos do computador. Leia as confirmações exibidas pelo programa e salve seu trabalho antes de usar limpeza, reparos, rede, energia ou formatação.
 
 ## 📂 Arquivos do Projeto
 
@@ -33,11 +33,30 @@ Não é necessário instalar módulos adicionais. Certifique-se de estar usando 
 
 ## ⚙️ Funcionalidades da Versão Principal (PowerShell)
 
+### Menu principal
+
+| Opção | Área | Principais recursos |
+|---:|---|---|
+| 1 | Limpeza | Temporários, Lixeira, Limpeza de Disco, DISM e Gerenciamento de Disco. |
+| 2 | Reparos | SFC, CHKDSK, DISM e ponto de restauração. |
+| 3 | Rede | IPConfig, testes, DNS, renovação de IP, velocidade e reset TCP/IP. |
+| 4 | Programas | Atualizações pelo Winget, inicialização e Programas e Recursos. |
+| 5 | Computador | Resumo do Windows, CPU, RAM, GPU, discos e adaptadores ativos. |
+| 6 | Hardware | Temperatura, discos, bateria, memória, DxDiag e dispositivos. |
+| 7 | Impressoras | Status, fila, página de teste e Spooler. |
+| 8 | Backup | Cópia incremental segura com Robocopy. |
+| 9 | Energia | Reinício, desligamento, UEFI/BIOS e Desempenho Máximo. |
+| L | Abrir logs | Abre o histórico de operações do dia. |
+| 0 | Sair | Fecha o painel após confirmação. |
+
 ### 🧹 1. Limpeza e Armazenamento
-* Remoção de arquivos temporários (`%TEMP%` e `C:\Windows\Temp`).
+* Remoção de arquivos temporários (`%TEMP%`, `C:\Windows\Temp` e cache de download do Windows Update). Itens em uso são ignorados e registrados.
+* Esvaziamento da Lixeira após confirmação.
 * Limpeza de Disco nativa (`cleanmgr`).
 * Limpeza de componentes substituídos do Windows (`DISM`).
 * Acesso rápido ao Gerenciamento de Disco.
+
+> A versão PowerShell não apaga a pasta Prefetch. Ela é gerenciada pelo Windows e a limpeza recorrente pode prejudicar a abertura de programas.
 
 ### 🔧 2. Reparos e Recuperação
 * Verificação e reparo de arquivos do sistema (`SFC /scannow`).
@@ -45,13 +64,26 @@ Não é necessário instalar módulos adicionais. Certifique-se de estar usando 
 * Restauração da integridade da imagem do Windows (`DISM CheckHealth / ScanHealth / RestoreHealth`).
 * Criação rápida de Pontos de Restauração.
 
+O reparo completo de disco (`CHKDSK /F /R`) é agendado para a próxima reinicialização e requer confirmação.
+
 ### 🌐 3. Rede e Conectividade
 * Exibição de IP, DNS, gateway e adaptadores.
 * Testes de conectividade (Ping) e latência de DNS (Cloudflare).
 * Teste integrado de velocidade de download (\~10 MB).
 * Ferramentas de renovação/liberação de IP e limpeza de cache DNS (`ipconfig`).
+* Redefinição de Winsock e TCP/IP; reinicie o computador após usar essa opção.
 
-### 💻 4. Hardware e Sistema
+O teste de velocidade transfere aproximadamente 10 MB da Cloudflare. O resultado é estimativo e pode variar com a rota, o servidor e outras atividades da rede.
+
+### 📦 4. Programas e Atualizações
+* Lista atualizações disponíveis pelo `winget`.
+* Atualiza todos os programas detectados pelo Winget após confirmação.
+* Lista programas configurados para iniciar com o Windows.
+* Abre **Programas e Recursos**.
+
+Se o Winget não estiver disponível, o painel apresenta o aviso e continua funcionando nas demais áreas.
+
+### 💻 5. Computador e Hardware
 * Informações detalhadas do computador (CPU, RAM, uso de armazenamento).
 * Diagnóstico de temperatura (via sensores ACPI).
 * Leitura do estado de saúde SMART dos discos físicos.
@@ -59,7 +91,15 @@ Não é necessário instalar módulos adicionais. Certifique-se de estar usando 
 
 ### 🖨️ 5. Impressoras e 💾 6. Backup Seguro
 * Gestão e teste de fila de impressão e reinício do *Spooler*.
-* Ferramenta guiada utilizando `robocopy` para copiar arquivos de forma segura.
+* Limpeza profunda da fila do Spooler, que cancela todos os documentos pendentes após confirmação.
+* Ferramenta guiada utilizando `robocopy` para cópia incremental segura.
+
+O backup transfere arquivos novos e alterados sem remover itens que já existam no destino. A versão PowerShell bloqueia destino igual à origem ou situado dentro dela, evitando cópias recursivas acidentais. Códigos 0 a 7 do Robocopy são tratados como resultados normais; códigos maiores são reportados como falha.
+
+### ⚡ 9. Energia e desempenho
+* Reinicia ou desliga o computador somente após confirmação.
+* Reinicia diretamente na UEFI/BIOS em equipamentos compatíveis.
+* Adiciona o plano **Desempenho Máximo** às opções de energia.
 
 ---
 
@@ -80,7 +120,7 @@ O arquivo `ferramentasdigitais.bat` oferece uma interface simplificada e direta,
 Todas as operações iniciadas pelo painel em PowerShell são registradas automaticamente em arquivos diários localizados em:
 `C:\ProgramData\FerramentasDigitais\Logs`
 
-Os logs classificam as ações em `INFO` (iniciado/concluído), `AVISO` (requer atenção) e `ERRO` (falha). Você pode visualizar o log do dia diretamente pela opção **9** do menu principal.
+Os logs classificam as ações em `INFO` (iniciado/concluído), `AVISO` (requer atenção) e `ERRO` (falha). Você pode visualizar o log do dia diretamente pela opção **L** do menu principal.
 
 ## 🛡️ Segurança e Boas Práticas
 
@@ -88,6 +128,8 @@ Os logs classificam as ações em `INFO` (iniciado/concluído), `AVISO` (requer 
 * Ambos os scripts contêm travas de segurança para evitar danos críticos (como bloquear formatação do disco C: no Batch).
 * Não interrompa processos críticos como SFC, DISM ou CHKDSK enquanto estiverem em execução.
 * Para usar o `DISM RestoreHealth` ou testes de rede, certifique-se de ter uma conexão ativa com a internet.
+* Um ponto de restauração não substitui cópias de segurança dos seus arquivos importantes.
+* Em notebooks, conecte o carregador antes de executar reparos demorados.
 
 *Desenvolvido para automatizar e simplificar o dia a dia de manutenção no Windows.*
 
