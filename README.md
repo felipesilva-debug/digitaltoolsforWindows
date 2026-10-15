@@ -1,2 +1,92 @@
-# digitaltoolsforWindows
-Painel de manutenção interativo para Windows desenvolvido em PowerShell e Batch. Centraliza ferramentas de diagnóstico de hardware, limpeza de disco, reparação do sistema e gestão de rede numa interface de terminal simples.
+# 🛠️ Ferramentas Digitais - Painel de Manutenção Windows
+
+Painel de manutenção para Windows, desenvolvido em PowerShell e Batch, organizado em menus interativos. O projeto reúne verificações de sistema, limpeza, reparo, rede, backup, impressoras e diagnósticos de hardware em uma única interface de terminal.
+
+> ⚠️ **Atenção:** Algumas funções alteram o sistema, a rede ou os arquivos do computador. Leia as confirmações exibidas pelo programa e salve seu trabalho antes de usar as funções de energia, reparo ou formatação.
+
+## 📂 Arquivos do Projeto
+
+O projeto possui duas versões principais que você pode escolher usar dependendo da sua necessidade:
+
+| Arquivo | Finalidade | 
+| ----- | ----- | 
+| `Iniciar-FerramentasDigitais.cmd` | Iniciador da versão principal. Abre o painel PowerShell com elevação automática de administrador. | 
+| `FerramentasDigitais.ps1` | Código-fonte principal da aplicação em PowerShell (Mais completo e avançado). | 
+| `ferramentasdigitais.bat` | Versão alternativa escrita em Batch puro. Mais simples e leve, focada em comandos diretos do CMD. | 
+
+## 🚀 Como Executar
+
+Não é necessário instalar módulos adicionais. Certifique-se de estar usando Windows 10 ou 11.
+
+### Opção 1: Versão Principal (PowerShell - Recomendado)
+1. Mantenha os arquivos `.cmd` e `.ps1` na mesma pasta.
+2. Clique duas vezes em `Iniciar-FerramentasDigitais.cmd`.
+3. Quando o Windows solicitar, permita a execução como administrador (UAC).
+4. O programa verifica automaticamente se está em modo administrador e reabre o painel com as permissões necessárias caso precise.
+
+### Opção 2: Versão Alternativa (Batch Puro)
+1. Clique com o botão direito sobre o arquivo `ferramentasdigitais.bat`.
+2. Selecione **Executar como administrador** (necessário para comandos como SFC, DISM e formatação).
+3. O menu será aberto diretamente no Prompt de Comando clássico (CMD).
+
+---
+
+## ⚙️ Funcionalidades da Versão Principal (PowerShell)
+
+### 🧹 1. Limpeza e Armazenamento
+* Remoção de arquivos temporários (`%TEMP%` e `C:\Windows\Temp`).
+* Limpeza de Disco nativa (`cleanmgr`).
+* Limpeza de componentes substituídos do Windows (`DISM`).
+* Acesso rápido ao Gerenciamento de Disco.
+
+### 🔧 2. Reparos e Recuperação
+* Verificação e reparo de arquivos do sistema (`SFC /scannow`).
+* Verificação de erros no disco (`CHKDSK`).
+* Restauração da integridade da imagem do Windows (`DISM CheckHealth / ScanHealth / RestoreHealth`).
+* Criação rápida de Pontos de Restauração.
+
+### 🌐 3. Rede e Conectividade
+* Exibição de IP, DNS, gateway e adaptadores.
+* Testes de conectividade (Ping) e latência de DNS (Cloudflare).
+* Teste integrado de velocidade de download (\~10 MB).
+* Ferramentas de renovação/liberação de IP e limpeza de cache DNS (`ipconfig`).
+
+### 💻 4. Hardware e Sistema
+* Informações detalhadas do computador (CPU, RAM, uso de armazenamento).
+* Diagnóstico de temperatura (via sensores ACPI).
+* Leitura do estado de saúde SMART dos discos físicos.
+* Acesso rápido ao DxDiag, Gerenciador de Dispositivos e Diagnóstico de Memória.
+
+### 🖨️ 5. Impressoras e 💾 6. Backup Seguro
+* Gestão e teste de fila de impressão e reinício do *Spooler*.
+* Ferramenta guiada utilizando `robocopy` para copiar arquivos de forma segura.
+
+---
+
+## 💻 Sobre a Versão `.bat` (ferramentasdigitais.bat)
+
+O arquivo `ferramentasdigitais.bat` oferece uma interface simplificada e direta, ideal para técnicos que precisam de execução ultrarrápida sem depender das políticas de execução do PowerShell. 
+
+**Seus menus incluem:**
+* **Limpeza:** Acesso rápido ao `cleanmgr`, limpeza do DISM e gerenciador `diskpart`.
+* **Módulo de Formatação:** Conta com um sistema de formatação de unidades via terminal com travas de segurança rigorosas (impede a formatação da unidade `C:`). Permite formatação rápida e completa.
+* **Reparos:** Atalhos diretos para os clássicos `sfc /scannow`, `chkdsk` e a suíte de recuperação de imagem do `DISM`.
+* **Rede:** Opções rápidas de `ipconfig` (flushdns, renew, release) e testes de Ping.
+
+---
+
+## 📝 Sistema de Logs (Versão PS1)
+
+Todas as operações iniciadas pelo painel em PowerShell são registradas automaticamente em arquivos diários localizados em:
+`C:\ProgramData\FerramentasDigitais\Logs`
+
+Os logs classificam as ações em `INFO` (iniciado/concluído), `AVISO` (requer atenção) e `ERRO` (falha). Você pode visualizar o log do dia diretamente pela opção **9** do menu principal.
+
+## 🛡️ Segurança e Boas Práticas
+
+* Execute o projeto somente em computadores que você administra ou tem autorização para manter.
+* Ambos os scripts contêm travas de segurança para evitar danos críticos (como bloquear formatação do disco C: no Batch).
+* Não interrompa processos críticos como SFC, DISM ou CHKDSK enquanto estiverem em execução.
+* Para usar o `DISM RestoreHealth` ou testes de rede, certifique-se de ter uma conexão ativa com a internet.
+
+*Desenvolvido para automatizar e simplificar o dia a dia de manutenção no Windows.*
